@@ -44,17 +44,17 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan
+      - name: Terraform Plan (PR)
         run: terraform plan -out=tfplan
         if: github.event_name == 'pull_request'
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-      - name: Terraform Show
+      - name: Terraform Show (PR)
         run: terraform show tfplan
         if: github.event_name == 'pull_request'
+
+      - name: Terraform Apply (Push to Main)
+        run: terraform apply -auto-approve
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
       - name: Terraform Apply (Manual Trigger)
         run: terraform apply -auto-approve
